@@ -54,16 +54,16 @@ class MastermindTest < Minitest::Test
     end
   end
 
-  def test_check_correct_positions
-    assert_equal 2, @mastermind.check_correct_positions("rbbg", "bbrg")
-    assert_equal 0, @mastermind.check_correct_positions("rgbb", "bbrg")
-    assert_equal 4, @mastermind.check_correct_positions("bbrg", "bbrg")
+  def test_check_positions
+    assert_equal 2, @mastermind.check_positions("rbbg", "bbrg")
+    assert_equal 0, @mastermind.check_positions("rgbb", "bbrg")
+    assert_equal 4, @mastermind.check_positions("bbrg", "bbrg")
   end
 
-  def test_check_correct_elements
-    assert_equal 4, @mastermind.check_correct_elements("rbbg", "bbrg")
-    assert_equal 3, @mastermind.check_correct_elements("ggrb", "bbrg")
-    assert_equal 0, @mastermind.check_correct_elements("yyyy", "bbrg")
+  def test_check_elements
+    assert_equal 4, @mastermind.check_elements("rbbg", "bbrg")
+    assert_equal 3, @mastermind.check_elements("ggrb", "bbrg")
+    assert_equal 0, @mastermind.check_elements("yyyy", "bbrg")
   end
 
   def test_validate_guess
