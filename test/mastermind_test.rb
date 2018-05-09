@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/mastermind'
+require 'pry'
 
 class MastermindTest < Minitest::Test
   def setup
@@ -14,16 +15,28 @@ class MastermindTest < Minitest::Test
   def test_attributes
     assert_equal :intermediate, Mastermind.new(:intermediate).difficulty
     assert_equal :beginner, @mastermind.difficulty
-    assert_instace_of Time, @mastermind.start_time
-    assert @mastermind.start_time > Time.now
+    assert_instance_of Time, @mastermind.start_time
+    assert @mastermind.start_time < Time.now
     assert_instance_of String, @mastermind.answer
     assert_equal 4, @mastermind.answer.length
     assert_equal 0, @mastermind.num_guesses
     assert_nil @mastermind.end_time
   end
 
+  def test_possible_colors
+    assert_equal "rgby", @mastermind.possible_colors
+    assert_equal "rgbyv", Mastermind.new(:intermediate).possible_colors
+    assert_equal "rgbyvo", Mastermind.new(:advanced).possible_colors
+  end
+
+  def test_answer_length
+    assert_equal 4, @mastermind.answer_length
+    assert_equal 6, Mastermind.new(:intermediate).answer_length
+    assert_equal 8, Mastermind.new(:advanced).answer_length
+  end
+
   def test_generate_beginner_answer
-    answer = @mastermind.generate_answer(:beginner)
+    answer = @mastermind.generate_answer
     assert_instance_of String, answer
     assert_equal 4, answer.length
     possible_colors = ["r", "g", "b", "y"]
@@ -34,9 +47,9 @@ class MastermindTest < Minitest::Test
 
   def test_generate_intermediate_answer
     @mastermind = Mastermind.new(:intermediate)
-    answer = @mastermind.generate_answer(:intermediate)
+    answer = @mastermind.generate_answer
     assert_instance_of String, answer
-    assert_equal 5, answer.length
+    assert_equal 6, answer.length
     possible_colors = ["r", "g", "b", "y", "v"]
     answer.chars.each do |color|
       assert possible_colors.include? color
@@ -45,10 +58,10 @@ class MastermindTest < Minitest::Test
 
   def test_generate_advanced_answer
     @mastermind = Mastermind.new(:advanced)
-    answer = @mastermind.generate_answer(:advanced)
+    answer = @mastermind.generate_answer
     assert_instance_of String, answer
     assert_equal 8, answer.length
-    possible_colors = ["r", "g", "b", "y", "p", "o"]
+    possible_colors = ["r", "g", "b", "y", "v", "o"]
     answer.chars.each do |color|
       assert possible_colors.include? color
     end
@@ -67,6 +80,7 @@ class MastermindTest < Minitest::Test
   end
 
   def test_validate_guess
+    skip
     assert @mastermind.validate_guess("rgby")
     refute @mastermind.validate_guess("rgbyr")
     refute @mastermind.validate_guess("rgb")
@@ -76,6 +90,7 @@ class MastermindTest < Minitest::Test
   end
 
   def test_invalid_feedback
+    skip
     assert_equal "is too long", @mastermind.validate_guess("rgbyr")
     assert_equal "is too short", @mastermind.validate_guess("rgb")
     assert_equal "contains invalid characters", @mastermind.validate_guess("rxby")
@@ -84,17 +99,19 @@ class MastermindTest < Minitest::Test
   end
 
   def test_guess
+    skip
     expected = {elements: 4, positions: 2}
     assert_equal expected, @mastermind.guess("rbbg", "bbrg")
     assert_equal 1, @mastermind.num_guesses
     expected = {elements: 4, positions: 1}
-    assert_equal expected, @mastermind.check_guess("rgbb", "bbrg")
+    assert_equal expected, @mastermind.guess("rgbb", "bbrg")
     expected = {elements: 3, positions: 0}
-    assert_equal expected, @mastermind.check_guess("ggrb", "bbrg")
+    assert_equal expected, @mastermind.guess("ggrb", "bbrg")
     assert_equal 3, @mastermind.num_guesses
   end
 
   def test_win_output
+    skip
     answer = @mastermind.answer
     guess = answer[0..2]
     if answer[3] != "r"
