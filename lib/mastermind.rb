@@ -1,5 +1,4 @@
 class Mastermind
-
   attr_reader :answer,
               :difficulty,
               :start_time,
@@ -90,5 +89,4 @@ class Mastermind
     return "Congratulations! You guessed the sequence #{@answer} "\
            "in #{@num_guesses} guesses over #{minutes} minutes, #{seconds} seconds."
   end
-
 end
