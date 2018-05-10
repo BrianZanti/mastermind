@@ -20,7 +20,6 @@ class MastermindTest < Minitest::Test
     assert_instance_of String, @mastermind.answer
     assert_equal 4, @mastermind.answer.length
     assert_equal 0, @mastermind.num_guesses
-    assert_nil @mastermind.end_time
   end
 
   def test_possible_colors
@@ -80,7 +79,6 @@ class MastermindTest < Minitest::Test
   end
 
   def test_validate_guess
-    skip
     assert @mastermind.validate_guess("rgby")
     refute @mastermind.validate_guess("rgbyr")
     refute @mastermind.validate_guess("rgb")
@@ -90,28 +88,25 @@ class MastermindTest < Minitest::Test
   end
 
   def test_invalid_feedback
-    skip
-    assert_equal "is too long", @mastermind.validate_guess("rgbyr")
-    assert_equal "is too short", @mastermind.validate_guess("rgb")
-    assert_equal "contains invalid characters", @mastermind.validate_guess("rxby")
-    assert_equal "is too long", @mastermind.validate_guess("r gby")
-    assert_equal "contains invalid characters", @mastermind.validate_guess("r by")
+    assert_equal "is too long", @mastermind.invalid_feedback("rgbyr")
+    assert_equal "is too short", @mastermind.invalid_feedback("rgb")
+    assert_equal "contains invalid characters", @mastermind.invalid_feedback("rxby")
+    assert_equal "is too long", @mastermind.invalid_feedback("r gby")
+    assert_equal "contains invalid characters", @mastermind.invalid_feedback("r by")
   end
 
   def test_guess
-    skip
     expected = {elements: 4, positions: 2}
     assert_equal expected, @mastermind.guess("rbbg", "bbrg")
     assert_equal 1, @mastermind.num_guesses
-    expected = {elements: 4, positions: 1}
+    expected = {elements: 4, positions: 0}
     assert_equal expected, @mastermind.guess("rgbb", "bbrg")
-    expected = {elements: 3, positions: 0}
+    expected = {elements: 3, positions: 1}
     assert_equal expected, @mastermind.guess("ggrb", "bbrg")
     assert_equal 3, @mastermind.num_guesses
   end
 
   def test_win_output
-    skip
     answer = @mastermind.answer
     guess = answer[0..2]
     if answer[3] != "r"
@@ -126,9 +121,7 @@ class MastermindTest < Minitest::Test
     output = @mastermind.win_output
     assert output.start_with? start
     output = @mastermind.win_output.split
-    assert_instance_of Integer, output[10].to_i
     assert_equal "minutes,", output[11]
-    assert_instance_of Integer, output[12].to_i
     assert_equal "seconds.", output[13]
   end
 end
